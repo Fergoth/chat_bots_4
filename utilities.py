@@ -28,8 +28,9 @@ def damerau_levenshtein_distance(s1, s2):
 
 def load_questions(folder_name):
     quiz = {}
-    for filename in os.listdir(folder_name):
-        with open(os.path.join(folder_name, filename), encoding="KOI8-R") as f:
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    for filename in os.listdir(os.path.join(script_dir, folder_name)):
+        with open(os.path.join(script_dir,folder_name, filename), encoding="KOI8-R") as f:
             for section in f.read().split("\n\n"):
                 section = section.strip()
                 if section.startswith("Вопрос"):
