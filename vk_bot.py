@@ -96,7 +96,8 @@ def main():
         encoding="utf-8",
         decode_responses=True,
     )
-    questions = load_questions("quiz-questions")
+    path_to_questions = os.environ.get("PATH_TO_QUESTIONS", "quiz-questions")
+    questions = load_questions(path_to_questions)
     tg_debug_token = os.environ.get("TELEGRAM_DEBUG_BOT_TOKEN")
     chat_id = os.environ["TELEGRAM_CHAT_ID"]
     if tg_debug_token:

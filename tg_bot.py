@@ -106,7 +106,8 @@ def main():
     load_dotenv()
     redis_host = os.environ.get("REDIS_HOST", "localhost")
     redis_port = os.environ.get("REDIS_PORT", "6379")
-    redis_db = int(os.environ.get("REDIS_DB_TG", "1"))
+    redis_db = int(os.environ.get("REDIS_DB_TG", "0"))
+    path_to_questions = os.environ.get("PATH_TO_QUESTIONS", "quiz-questions")
     redis_client = redis.Redis(
         host=redis_host,
         port=redis_port,
@@ -148,7 +149,7 @@ def main():
         fallbacks=[CommandHandler("cancel", cancel)],
     )
     dispatcher.add_handler(conv_handler)
-    dispatcher.bot_data["questions"] = load_questions("quiz-questions")
+    dispatcher.bot_data["questions"] = load_questions(path_to_questions)
     dispatcher.bot_data["redis_client"] = redis_client
     dispatcher.bot_data["reply_markup"] = reply_markup
     logger.info("Телеграм Бот quiz запущен")
