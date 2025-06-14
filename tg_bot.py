@@ -18,19 +18,11 @@ from utilities import check_answer, load_questions
 
 logger = logging.getLogger("telegram_debug")
 
-keyboard = [
-    [
-        KeyboardButton("Новый вопрос"),
-        KeyboardButton("Сдаться"),
-    ],
-    [KeyboardButton("Мой счёт")],
-]
-reply_markup = ReplyKeyboardMarkup(keyboard)
-
 CHOOSING, ANSWERING = range(2)
 
 
 def handle_new_question_request(update: Update, context: CallbackContext) -> None:
+    reply_markup = context.bot_data["reply_markup"]
     user_id = update.message.from_user.id
     redis_client = context.bot_data["redis_client"]
     questions = context.bot_data["questions"]
@@ -47,6 +39,7 @@ def handle_new_question_request(update: Update, context: CallbackContext) -> Non
 
 
 def handle_solution_attempt(update: Update, context: CallbackContext) -> None:
+    reply_markup = context.bot_data["reply_markup"]
     user_id = update.message.from_user.id
     redis_client = context.bot_data["redis_client"]
     questions = context.bot_data["questions"]
@@ -67,6 +60,7 @@ def handle_solution_attempt(update: Update, context: CallbackContext) -> None:
 
 
 def handle_give_up(update: Update, context: CallbackContext) -> None:
+    reply_markup = context.bot_data["reply_markup"]
     user_id = update.message.from_user.id
     redis_client = context.bot_data["redis_client"]
     questions = context.bot_data["questions"]
@@ -87,6 +81,7 @@ def handle_give_up(update: Update, context: CallbackContext) -> None:
 
 
 def start(update: Update, context: CallbackContext) -> None:
+    reply_markup = context.bot_data["reply_markup"]
     update.message.reply_text("Привет, я бот-викторина.", reply_markup=reply_markup)
     return CHOOSING
 
@@ -121,6 +116,15 @@ def main():
     updater = Updater(token=tg_token)
     dispatcher = updater.dispatcher
 
+    keyboard = [
+        [
+            KeyboardButton("Новый вопрос"),
+            KeyboardButton("Сдаться"),
+        ],
+        [KeyboardButton("Мой счёт")],
+    ]
+    reply_markup = ReplyKeyboardMarkup(keyboard)
+
     conv_handler = ConversationHandler(
         entry_points=[CommandHandler("start", start)],
         states={
@@ -139,6 +143,7 @@ def main():
     dispatcher.add_handler(conv_handler)
     dispatcher.bot_data["questions"] = load_questions("quiz-questions")
     dispatcher.bot_data["redis_client"] = redis_client
+    dispatcher.bot_data["reply_markup"] = reply_markup
     logger.info("Телеграм Бот quiz запущен")
     updater.start_polling()
     updater.idle()
