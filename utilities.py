@@ -1,7 +1,7 @@
 import os
 
 
-def damerau_levenshtein_distance(s1, s2):
+def get_damerau_levenshtein_distance(s1, s2):
     d = {}
     lenstr1 = len(s1)
     lenstr2 = len(s2)
@@ -30,7 +30,9 @@ def load_questions(folder_name):
     quiz = {}
     script_dir = os.path.dirname(os.path.abspath(__file__))
     for filename in os.listdir(os.path.join(script_dir, folder_name)):
-        with open(os.path.join(script_dir,folder_name, filename), encoding="KOI8-R") as f:
+        with open(
+            os.path.join(script_dir, folder_name, filename), encoding="KOI8-R"
+        ) as f:
             for section in f.read().split("\n\n"):
                 section = section.strip()
                 if section.startswith("Вопрос"):
@@ -50,6 +52,6 @@ def check_answer(user_answer, correct_answer):
     correct_answer = correct_answer[:cut_index]
     levenshtein_index = 3
     return (
-        damerau_levenshtein_distance(user_answer, correct_answer)
+        get_damerau_levenshtein_distance(user_answer, correct_answer)
         <= len(correct_answer) // levenshtein_index
     )
