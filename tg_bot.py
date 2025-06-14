@@ -103,10 +103,17 @@ class TelegramLogsHandler(logging.Handler):
 
 
 def main():
-    redis_client = redis.Redis(
-        host="localhost", port=6379, db=0, encoding="utf-8", decode_responses=True
-    )
     load_dotenv()
+    redis_host = os.environ.get("REDIS_HOST", "localhost")
+    redis_port = os.environ.get("REDIS_PORT", "6379")
+    redis_db = int(os.environ.get("REDIS_DB_TG", "1"))
+    redis_client = redis.Redis(
+        host=redis_host,
+        port=redis_port,
+        db=redis_db,
+        encoding="utf-8",
+        decode_responses=True,
+    )
     tg_debug_token = os.environ.get("TELEGRAM_DEBUG_BOT_TOKEN")
     chat_id = os.environ["TELEGRAM_CHAT_ID"]
     if tg_debug_token:
