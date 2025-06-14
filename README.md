@@ -18,10 +18,17 @@ pip install -r requirements.txt
 2. Заполните файл `.env` следующим образом без кавычек:
 ```bash
 TELEGRAM_BOT_TOKEN=token
-TELEGRAM_CHAT_ID=id
-TELEGRAM_DEBUG_BOT_TOKEN=token
 VK_API_KEY=vk_token
 ```
+### Необязательные переменные
+* TELEGRAM_CHAT_ID=id
+* TELEGRAM_DEBUG_BOT_TOKEN=token
+* REDIS_HOST - хост редис, по умолчанию localhost
+* REDIS_PORT - порт редис, по умолчанию 6379
+* REDIS_DB_TG - номер базы данных редис для телеграм бота, по умолчанию 0
+* REDIS_DB_VK - номер базы данных редис для vk бота, по умолчанию 1
+Требуется иметь различные базы под разных ботов чтобы id не пересекались
+* PATH_TO_QUESTIONS - путь к папке с вопросами, по умолчанию quiz-questions
 #### Как получить токены
 
 *  Токен для телеграм бота TELEGRAM_BOT_TOKEN(Бот для квиза) и TELEGRAM_DEBUG_BOT_TOKEN(Бот для отладки, **Необязательный**, если не указан, логи идут в консоль) можно получить при создании бота [ссылке](https://telegram.me/BotFather)
